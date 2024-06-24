@@ -19,9 +19,4 @@ public class Location {
     public Location() {
     }
 
-    //    public Location() {
-//        this.location_id = location_id;
-//        this.name = name;
-//        this.address = address;
-//    }
 }

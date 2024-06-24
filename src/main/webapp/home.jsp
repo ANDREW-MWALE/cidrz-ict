@@ -29,7 +29,30 @@
             background-color: #ddd;
             color: black;
         }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #f2f2f2;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
         .container {
+            margin-left: 270px; /* Adjusted for sidebar width */
             padding: 20px;
         }
         .grid-container {
@@ -76,12 +99,20 @@
         <a href="location-form.jsp">Location</a>
     </div>
 
+    <div class="sidebar">
+        <a href="#home">Home</a>
+        <a href="#report">Report Incident</a>
+        <a href="#info">Request for Change</a>
+        <a href="#help">Help Desk</a>
+        <a href="role-form.jsp">Role</a>
+        <a href="location-form.jsp">Location</a>
+    </div>
+
     <div class="container">
-        <h1>Welcome...!: ${users}</h1>
-        <p>Select an option below:</p>
+        <h1>ACTIONS</h1>
         <div class="grid-container">
-            <a href="incident-form.jsp" class="clickable-box"><i class="fas fa-exclamation-circle"></i>Report Incident</a>
-            <a href="info.jsp" class="clickable-box"><i class="fas fa-info-circle"></i>Info</a>
+            <a href="incident-list.jsp" class="clickable-box"><i class="fas fa-exclamation-circle"></i>Report Incident</a>
+            <a href="requestForChange-form.jsp" class="clickable-box"><i class="fas fa-sync"></i> Request for Change</a>
             <a href="helpDesk.jsp" class="clickable-box"><i class="fas fa-life-ring"></i>Help Desk</a>
             <a href="contactUs.jsp" class="clickable-box"><i class="fas fa-envelope"></i>Contact Us</a>
         </div>

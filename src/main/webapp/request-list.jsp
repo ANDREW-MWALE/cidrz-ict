@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Incident List</title>
+    <title>Request For Change List</title>
     <!-- Add Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -89,7 +89,7 @@
     </div>
 
     <div class="content">
-        <h1>Locations</h1>
+        <h1>Requests </h1>
 
         <%
             Connection con = null;
@@ -99,26 +99,37 @@
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=cidrz_ict", "sa", "12345");
                 stmt = con.createStatement();
-                rs = stmt.executeQuery("SELECT * FROM location");
+                rs = stmt.executeQuery("SELECT * FROM requestForChange");
 
                 out.println("<table>");
                 out.println("<thead>");
                 out.println("<tr>");
-                out.println("<th>location ID</th>");
-                out.println("<th>Name</th>");
-                out.println("<th>Address</th>");
+                out.println("<th>ID</th>");
+                out.println("<th>Request No</th>");
+                out.println("<th>Log Date</th>");
+                out.println("<th>Change Date</th>");
+                out.println("<th>Description Of Change</th>");
+                out.println("<th>Motivation</th>");
+                out.println("<th>Additional Information</th>");
+                out.println("<th>Department</th>");
                 out.println("<th>Actions</th>");
+                out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
 
                 while (rs.next()) {
                     out.println("<tr>");
-                    out.println("<td>" + rs.getLong("location_id") + "</td>");
-                    out.println("<td>" + rs.getString("name") + "</td>");
-                    out.println("<td>" + rs.getString("address") + "</td>");
+                    out.println("<td>" + rs.getInt("id") + "</td>");
+                    out.println("<td>" + rs.getString("requestNo") + "</td>");
+                    out.println("<td>" + rs.getDate("logDate") + "</td>");
+                    out.println("<td>" + rs.getDate("changeDate") + "</td>");
+                    out.println("<td>" + rs.getString("descriptionOfChange") + "</td>");
+                    out.println("<td>" + rs.getString("motivation") + "</td>");
+                    out.println("<td>" + rs.getString("adInfo") + "</td>");
+                    out.println("<td>" + rs.getString("department") + "</td>");
                     out.println("<td class='actions'>");
-                    out.println("<a href='IncidentServlet?action=edit&location_id=" + rs.getLong("location_id") + "'><i class='fas fa-edit'></i> Edit</a>");
-                    out.println("<a href='IncidentServlet?action=delete&location_id=" + rs.getLong("location_id") + "'><i class='fas fa-trash-alt'></i> Delete</a>");
+                    out.println("<a href='RequestForChangeServlet?action=edit&id=" + rs.getInt("id") + "'><i class='fas fa-edit'></i> Edit</a>");
+                    out.println("<a href='RequestForChangeServlet?action=delete&id=" + rs.getInt("id") + "'><i class='fas fa-trash-alt'></i> Delete</a>");
                     out.println("</td>");
                     out.println("</tr>");
                 }

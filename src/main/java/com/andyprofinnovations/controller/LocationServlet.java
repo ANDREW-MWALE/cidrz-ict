@@ -47,7 +47,11 @@ public class LocationServlet extends HttpServlet {
                     deleteLocation(request, response);
                     break;
                 default:
-                    locationList(request,response);
+                    try {
+                        locationList(request,response);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
 
             }
 
@@ -69,18 +73,13 @@ public class LocationServlet extends HttpServlet {
         response.sendRedirect("?action=list");
     }
     private void locationList(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-        List<Location> listLocation = locationDAO.listLocation();
-        request.setAttribute("listLocation", listLocation);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("location-list.jsp");
-        dispatcher.forward(request, response);
-
+            throws ServletException, IOException, SQLException {
 
     }
 
     private void deleteLocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         locationDAO.deleteLocation(Integer.valueOf(request.getParameter("location_id")));
-        response.sendRedirect("?action=list");
+        response.sendRedirect("location-list.jsp");
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -128,7 +127,7 @@ public class LocationServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        response.sendRedirect("?action=list");
+        response.sendRedirect("home.jsp");
 
     }
 }

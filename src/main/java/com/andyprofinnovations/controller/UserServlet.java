@@ -2,6 +2,7 @@ package com.andyprofinnovations.controller;
 
 import com.andyprofinnovations.dao.UserDAO;
 import com.andyprofinnovations.model.Users;
+import com.andyprofinnovations.util.PasswordUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,8 +53,8 @@ public class UserServlet extends HttpServlet {
         }
 
         // Passwords match, proceed with registration
-        Users newUser = new Users(0, name, position, email, roleId, password);
-        newUser.setPassword(password); // Set the password in the User object
+        String hashedPassword = PasswordUtil.hashPassword(password); // Hash the password
+        Users newUser = new Users(0, name, position, email, roleId, hashedPassword); // Use the hashed password
         userDAO.addUser(newUser);
 
         response.sendRedirect("registration_success.jsp");
@@ -63,7 +64,9 @@ public class UserServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Users user = userDAO.getUserByEmailAndPassword(email, password);
+        String hashedPassword = PasswordUtil.hashPassword(password); // Hash the entered password
+
+        Users user = userDAO.getUserByEmailAndPassword(email, hashedPassword); // Compare hashed password
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user);

@@ -9,6 +9,14 @@
     <!-- Add Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
         /* Navigation bar styles */
         .navbar {
             overflow: hidden;
@@ -35,21 +43,12 @@
             margin-bottom: 70px; /* Adjust margin to accommodate footer */
         }
 
-        /* Footer styles */
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: absolute; /* Position footer relative to the content */
-            width: 100%;
-            bottom: 0;
-        }
-
         /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
@@ -60,6 +59,11 @@
 
         th {
             background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        td {
+            font-size: 14px;
         }
 
         .actions {
@@ -68,7 +72,7 @@
         }
 
         .actions a {
-            color: #1E9FF2; /* Updated color */
+            color: #1E9FF2;
             text-decoration: none;
             padding: 5px 10px;
             border: 1px solid #ddd;
@@ -77,12 +81,24 @@
         }
 
         .actions a:hover {
-            background-color: #0d8dc3; /* Slightly darker shade for hover */
+            background-color: #0d8dc3;
             color: white;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
         }
     </style>
 </head>
 <body>
+    <!-- Navigation bar -->
     <div class="navbar">
         <a href="home.jsp">Home</a>
         <a href="incident-form.jsp">Report Incident</a>
@@ -91,79 +107,80 @@
     <div class="content">
         <h1>Incidents</h1>
 
-        <%
-            Connection con = null;
-            Statement stmt = null;
-            ResultSet rs = null;
-            try {
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=cidrz_ict", "sa", "12345");
-                stmt = con.createStatement();
-                rs = stmt.executeQuery("SELECT * FROM incident");
-
-                out.println("<table>");
-                out.println("<thead>");
-                out.println("<tr>");
-                out.println("<th>Incident ID</th>");
-                out.println("<th>Name</th>");
-                out.println("<th>Description</th>");
-                out.println("<th>Causes</th>");
-                out.println("<th>Location ID</th>");
-                out.println("<th>Created By</th>");
-                out.println("<th>Created Date</th>");
-                out.println("<th>Updated By</th>");
-                out.println("<th>Last Updated Date</th>");
-                out.println("<th>Actions</th>");
-                out.println("</tr>");
-                out.println("</thead>");
-                out.println("<tbody>");
-
-                while (rs.next()) {
-                    out.println("<tr>");
-                    out.println("<td>" + rs.getLong("incident_id") + "</td>");
-                    out.println("<td>" + rs.getString("name") + "</td>");
-                    out.println("<td>" + rs.getString("description") + "</td>");
-                    out.println("<td>" + rs.getString("causes") + "</td>");
-                    out.println("<td>" + rs.getInt("location_id") + "</td>");
-                    out.println("<td>" + rs.getString("created_by") + "</td>");
-                    out.println("<td>" + rs.getDate("created_date") + "</td>");
-                    out.println("<td>" + rs.getString("updated_by") + "</td>");
-                    out.println("<td>" + rs.getDate("last_updated_date") + "</td>");
-                    out.println("<td class='actions'>");
-                    out.println("<a href='IncidentServlet?action=edit&incident_id=" + rs.getLong("incident_id") + "'><i class='fas fa-edit'></i> Edit</a>");
-                    out.println("<a href='IncidentServlet?action=delete&incident_id=" + rs.getLong("incident_id") + "'><i class='fas fa-trash-alt'></i> Delete</a>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                }
-
-                out.println("</tbody>");
-                out.println("</table>");
-            } catch (Exception e) {
-                out.println("Error: " + e.getMessage());
-            } finally {
-                if (rs != null) {
+        <table>
+            <thead>
+                <tr>
+                    <th>Incident ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Causes</th>
+                    <th>Location ID</th>
+                    <th>Created By</th>
+                    <th>Created Date</th>
+                    <th>Updated By</th>
+                    <th>Last Updated Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% // Java code to fetch incidents from database and display them
+                    Connection con = null;
+                    Statement stmt = null;
+                    ResultSet rs = null;
                     try {
-                        rs.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+                        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=cidrz_ict", "sa", "12345");
+                        stmt = con.createStatement();
+                        rs = stmt.executeQuery("SELECT * FROM incident");
+
+                        while (rs.next()) {
+                %>
+                <tr>
+                    <td><%= rs.getLong("incident_id") %></td>
+                    <td><%= rs.getString("name") %></td>
+                    <td><%= rs.getString("description") %></td>
+                    <td><%= rs.getString("causes") %></td>
+                    <td><%= rs.getInt("location_id") %></td>
+                    <td><%= rs.getString("created_by") %></td>
+                    <td><%= rs.getDate("created_date") %></td>
+                    <td><%= rs.getString("updated_by") %></td>
+                    <td><%= rs.getDate("last_updated_date") %></td>
+                    <td class='actions'>
+                        <a href='IncidentServlet?action=edit&incident_id=<%= rs.getLong("incident_id") %>'><i class='fas fa-edit'></i> Edit</a>
+                        <a href='IncidentServlet?action=delete&incident_id=<%= rs.getLong("incident_id") %>'><i class='fas fa-trash-alt'></i> Delete</a>
+                    </td>
+                </tr>
+                <%
+                        }
+                    } catch (Exception e) {
+                        out.println("Error: " + e.getMessage());
+                    } finally {
+                        // Close resources
+                        if (rs != null) {
+                            try {
+                                rs.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (stmt != null) {
+                            try {
+                                stmt.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (con != null) {
+                            try {
+                                con.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                }
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (con != null) {
-                    try {
-                        con.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        %>
+                %>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

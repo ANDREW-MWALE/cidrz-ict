@@ -21,6 +21,14 @@
     <servlet-name>LocationServlet</servlet-name>
     <servlet-class>com.andyprofinnovations.controller.LocationServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>RequestForChangeServlet</servlet-name>
+    <servlet-class>com.andyprofinnovations.controller.RequestForChangeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreateIncidentServlet</servlet-name>
+    <servlet-class>com.andyprofinnovations.controller.CreateIncidentServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>IncidentServlet</servlet-name>
     <url-pattern>/IncidentServlet</url-pattern>
@@ -36,6 +44,14 @@
   <servlet-mapping>
     <servlet-name>LocationServlet</servlet-name>
     <url-pattern>/LocationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RequestForChangeServlet</servlet-name>
+    <url-pattern>/RequestForChangeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreateIncidentServlet</servlet-name>
+    <url-pattern>/CreateIncidentServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

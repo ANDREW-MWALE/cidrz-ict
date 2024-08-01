@@ -12,6 +12,7 @@ private Connection con = DBConnection.getConn();
 
 
     public boolean addRole(Role role) throws ServletException, SQLException {
+        System.out.println("this");
         if(con==null){
             throw new SQLException("Database connection not successfull");
         }
@@ -94,4 +95,6 @@ private Connection con = DBConnection.getConn();
 
         return list;
     }
+
+
 }

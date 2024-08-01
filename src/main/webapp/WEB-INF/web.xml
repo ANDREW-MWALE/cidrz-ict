@@ -29,6 +29,14 @@
     <servlet-name>CreateIncidentServlet</servlet-name>
     <servlet-class>com.andyprofinnovations.controller.CreateIncidentServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>GenerateReportServlet</servlet-name>
+    <servlet-class>com.andyprofinnovations.controller.GenerateReportServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ApprovalServlet</servlet-name>
+    <servlet-class>com.andyprofinnovations.controller.ApprovalServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>IncidentServlet</servlet-name>
     <url-pattern>/IncidentServlet</url-pattern>
@@ -52,6 +60,14 @@
   <servlet-mapping>
     <servlet-name>CreateIncidentServlet</servlet-name>
     <url-pattern>/CreateIncidentServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GenerateReportServlet</servlet-name>
+    <url-pattern>/GenerateReportServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ApprovalServlet</servlet-name>
+    <url-pattern>/ApprovalServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

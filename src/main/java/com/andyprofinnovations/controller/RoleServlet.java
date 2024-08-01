@@ -110,6 +110,7 @@ public class RoleServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("gggggg");
         String name = request.getParameter("name");
         String description = request.getParameter("description");
 
@@ -118,8 +119,12 @@ public class RoleServlet extends HttpServlet {
         Role role = new Role();
         role.setName(name);
         role.setDescription(description);
-
-        response.sendRedirect("?action=list");
+        try {
+            roleDAO.addRole(role);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        response.sendRedirect("home.jsp");
 
     }
 }

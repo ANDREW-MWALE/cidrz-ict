@@ -1,10 +1,7 @@
 package com.andyprofinnovations.dao;
 
 import com.andyprofinnovations.model.Incident;
-import com.andyprofinnovations.model.Location;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
@@ -12,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.valueOf;
 import static java.sql.DriverManager.getConnection;
 
 public class IncidentDAO {
@@ -72,35 +70,34 @@ public class IncidentDAO {
     public boolean editIncident(Incident incident) {
         System.out.println("show");
 
-        String sql = "update incident set name=?,description=?,causes=?,location_id=?,created_by=?,created_date=?,updated_by=?,last_updated_date=? where incident_id=?";
+        String sql = "UPDATE incident SET name=?, description=?, causes=?, location_id=?, created_by=?, created_date=?, updated_by=?, last_updated_date=? WHERE incident_id=?";
         int i = 0;
 
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
+        try (Connection con = DBConnection.getConn();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 
             preparedStatement.setString(1, incident.getName());
             preparedStatement.setString(2, incident.getDescription());
             preparedStatement.setString(3, incident.getCauses());
-            preparedStatement.setString(4, String.valueOf(incident.getIncident_id()));
+            preparedStatement.setInt(4, incident.getLocation_id());
             preparedStatement.setString(5, incident.getCreated_by());
-            // Set the created_date and last_updated_date
             preparedStatement.setTimestamp(6, incident.getCreated_date());
             preparedStatement.setString(7, incident.getUpdated_by());
             preparedStatement.setTimestamp(8, incident.getLast_updated_date());
+            preparedStatement.setInt(9, incident.getIncident_id());
 
             i = preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating incident", e);
         }
-
         return i > 0;
     }
     public boolean deleteIncident(int incident_id) {
         String sql = "DELETE FROM incident WHERE incident_id=?";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, Integer.parseInt(String.valueOf(incident_id)));
+            preparedStatement.setInt(1, Integer.parseInt(valueOf(incident_id)));
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows > 0;  // Return true if at least one row was affected
         } catch (SQLException e) {

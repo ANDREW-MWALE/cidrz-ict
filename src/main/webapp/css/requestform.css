@@ -1,0 +1,45 @@
+/* style.css */
+body {
+    padding-top: 20px;
+}
+
+.container {
+    max-width: 800px;
+    border: 1% solid #000; /* Adjusting the border width to 1% */
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+.flex-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1 1 calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 100%;
+}
+
+textarea.form-control {
+    height: 150px; /* Adjust the height as needed */
+}
+
+.btn-primary {
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: darkblue;
+}
+
+/* Additional custom styles if needed */
+.btn-lg {
+    padding: 15px 30px;
+    font-size: 20px;
+}

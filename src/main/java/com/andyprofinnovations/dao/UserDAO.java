@@ -2,10 +2,9 @@ package com.andyprofinnovations.dao;
 
 import com.andyprofinnovations.model.Users;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     // Method to add a new user to the database
@@ -49,5 +48,48 @@ public class UserDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Users> userList() {
+        List<Users> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM users";
+
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rst = stmt.executeQuery(sql);
+
+            while (rst.next()){
+            Users user= new Users();
+            user.setUser_id(rst.getInt("user_id"));
+            user.setName(rst.getString("name"));
+            user.setPosition(rst.getString("position"));
+            user.setEmail(rst.getString("email"));
+            user.setPassword(rst.getString("password"));
+
+            users.add(user);
+
+                           }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
+    }
+
+    public boolean editUpdateUser(Users users) throws SQLException {
+        String sql = "Update users set name=?, position=?, position=?, email=? role_id=? password=? where user_id=?";
+        int i = 0;
+        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+        preparedStatement.setString(1, users.getName());
+        preparedStatement.setString(2, users.getPosition());
+        preparedStatement.setString(3, users.getEmail());
+        preparedStatement.setString(4, String.valueOf(users.getRole_id()));
+        preparedStatement.setString(5, users.getPassword());
+
+        i = preparedStatement.executeUpdate();
+        return i>0;
+    }
+
+    public void deleteUsers(String userId) {
     }
 }

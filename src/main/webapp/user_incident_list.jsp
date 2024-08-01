@@ -146,7 +146,7 @@
                     <td><%= rs.getDate("last_updated_date") %></td>
                     <td class='actions'>
                         <a href='updateIncident.jsp?action=edit&incident_id=<%= rs.getLong("incident_id") %>'><i class='fas fa-edit'></i> Edit</a>
-                        <a href='IncidentServlet?action=delete&incident_id=<%= rs.getLong("incident_id") %>'><i class='fas fa-trash-alt'></i> Delete</a>
+                        <a href='IncidentServlet?action=delete&incident_id=<%= rs.getLong("incident_id") %>'> Cancel</a>
                     </td>
                 </tr>
                 <%

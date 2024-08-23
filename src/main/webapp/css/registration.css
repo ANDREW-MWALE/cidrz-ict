@@ -1,0 +1,79 @@
+body {
+            font-family: Arial, sans-serif;
+                        background-color: #f0f8ff;
+                        color: #000080;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+        }
+        .container {
+            background-color: #e6f7ff;
+            border: 1px solid #b3d1ff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #000080;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+        }
+        .input-group {
+            position: relative;
+            margin: 10px 0;
+        }
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px 10px 10px 40px; /* Adjust padding to make space for the icon */
+            border: 1px solid #b3d1ff;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .input-group .fa {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000080;
+        }
+        input[type="submit"] {
+            background-color: #000080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #0000cc;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        p {
+            text-align: center;
+        }
+        a {
+            color: #0000cc;
+        }
+        a:hover {
+            text-decoration: none;
+            color: #000080;
+        }
+        select {
+            appearance: none;
+            background-color: #ffffff;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%27http://www.w3.org/2000/svg%27 viewBox%3D%270 0 4 5%27%3E%3Cpath fill%3D%27%23000000%27 d%3D%27M2 0L0 2h4zm0 5L0 3h4z%27/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 10px 5px;
+        }

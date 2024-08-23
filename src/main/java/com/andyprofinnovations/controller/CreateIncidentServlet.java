@@ -2,8 +2,10 @@ package com.andyprofinnovations.controller;
 
 import com.andyprofinnovations.dao.IncidentDAO;
 import com.andyprofinnovations.dao.LocationDAO;
+import com.andyprofinnovations.dao.StatusDAO;
 import com.andyprofinnovations.model.Incident;
 import com.andyprofinnovations.model.Location;
+import com.andyprofinnovations.model.Status;
 import com.andyprofinnovations.model.Users;
 
 import javax.servlet.ServletException;
@@ -17,11 +19,14 @@ import java.util.List;
 public class CreateIncidentServlet extends HttpServlet {
     private IncidentDAO incidentDAO;
     private LocationDAO locationDAO;
+    private StatusDAO statusDAO;
 
     @Override
     public void init() throws ServletException {
         incidentDAO = new IncidentDAO();
         locationDAO = new LocationDAO();
+        statusDAO = new StatusDAO();
+
     }
 
     @Override
@@ -41,10 +46,12 @@ public class CreateIncidentServlet extends HttpServlet {
 
             List<Incident> incidents = incidentDAO.listIncident();
                 List<Location> locations = locationDAO.listLocation();
+                List<Status> statuses = statusDAO.listStatus();
 
                 // Set attributes in request scope
                 request.setAttribute("incidents", incidents);
                 request.setAttribute("locations", locations);
+                request.setAttribute("statuses", statuses);
 
                 // Forward to JSP for rendering
                 request.getRequestDispatcher("updateIncident.jsp").forward(request, response);

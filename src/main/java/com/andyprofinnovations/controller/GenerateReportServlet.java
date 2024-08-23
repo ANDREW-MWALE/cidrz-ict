@@ -2,90 +2,101 @@ package com.andyprofinnovations.controller;
 
 import com.andyprofinnovations.dao.IncidentDAO;
 import com.andyprofinnovations.model.Incident;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GenerateReportServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(GenerateReportServlet.class.getName());
     private IncidentDAO incidentDAO;
 
-    public void init() {
+    @Override
+    public void init() throws ServletException {
+        super.init();
         incidentDAO = new IncidentDAO();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String period = request.getParameter("period");
-       if(period == null){
-           period = "";
-        }
-        switch (period) {
-            case "weekly":
-                period = "SELECT * FROM incident WHERE created_date >= DATED(day, -7, GET DATE())";
-                break;
-            case "monthly":
-                period = "SELECT * FROM incident WHERE created_date >= DATED(month, -1, GET DATE())";
-                break;
-            case "annual":
-                period = "SELECT * FROM incident WHERE created_date >= DATED(year, -1, GET DATE())";
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid report period.");
-                return;
+        if (period == null || period.isEmpty()) {
+            LOGGER.severe("Period parameter is missing");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing period parameter");
+            return;
         }
 
-        // Set response content type
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=" + period + "_report.pdf");
-
+        List<Incident> incidents;
         try {
-            List<Incident> listIncidents = incidentDAO.listIncident();
-
-            // Generate PDF
-            Document document = new Document();
-            PdfWriter.getInstance(document, response.getOutputStream());
-            document.open();
-
-            document.add(new Paragraph(period.substring(0, 1).toUpperCase() + period.substring(1) + " Report"));
-            document.add(new Paragraph("Generated on: " + new java.util.Date()));
-            document.add(new Paragraph(" "));
-
-            PdfPTable table = new PdfPTable(9);
-            table.addCell("Incident ID");
-            table.addCell("Name");
-            table.addCell("Description");
-            table.addCell("Causes");
-            table.addCell("Location ID");
-            table.addCell("Created By");
-            table.addCell("Created Date");
-            table.addCell("Updated By");
-            table.addCell("Last Updated Date");
-
-            for (Incident incident : listIncidents) {
-                table.addCell(Long.toString(incident.getIncident_id()));
-                table.addCell(incident.getName());
-                table.addCell(incident.getDescription());
-                table.addCell(incident.getCauses());
-                table.addCell(Integer.toString(incident.getLocation_id()));
-                table.addCell(incident.getCreated_by());
-                table.addCell(String.valueOf(incident.getCreated_date()));
-                table.addCell(incident.getUpdated_by());
-                table.addCell(incident.getLast_updated_date().toString());
+            incidents = getIncidentsForPeriod(period);
+            if (incidents != null) {
+                generateExcelReport(response, incidents, period);
+            } else {
+                LOGGER.severe("Invalid period: " + period);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid period: " + period);
             }
-
-            document.add(table);
-            document.close();
-
-        } catch (DocumentException e) {
-            throw new ServletException(e);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error generating report for period: " + period, e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error generating report");
         }
+    }
+
+    private List<Incident> getIncidentsForPeriod(String period) {
+        switch (period) {
+            case "daily":
+                return incidentDAO.getDailyIncidents();
+            case "weekly":
+                return incidentDAO.getWeeklyIncidents();
+            case "monthly":
+                return incidentDAO.getMonthlyIncidents();
+            case "quarterly":
+                return incidentDAO.getQuarterlyIncidents();
+            case "yearly":
+                return incidentDAO.getYearlyIncidents();
+            default:
+                return null;
+        }
+    }
+
+    private void generateExcelReport(HttpServletResponse response, List<Incident> incidents, String period) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Incident Report - " + period);
+
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"Incident ID", "Name", "Description", "Causes", "Location ID", "Created By", "Created Date", "Updated By", "Last Updated Date"};
+
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+        }
+
+        int rowNum = 1;
+        for (Incident incident : incidents) {
+            Row row = sheet.createRow(rowNum++);
+
+            row.createCell(0).setCellValue(incident.getIncident_id());
+            row.createCell(1).setCellValue(incident.getName());
+            row.createCell(2).setCellValue(incident.getDescription());
+            row.createCell(3).setCellValue(incident.getCauses());
+            row.createCell(4).setCellValue(incident.getLocation_id());
+            row.createCell(5).setCellValue(incident.getCreated_by());
+            row.createCell(6).setCellValue(incident.getCreated_date().toString());
+            row.createCell(7).setCellValue(incident.getUpdated_by());
+            row.createCell(8).setCellValue(incident.getLast_updated_date().toString());
+        }
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=Incident_Report_" + period + ".xlsx");
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 }

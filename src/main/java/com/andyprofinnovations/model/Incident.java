@@ -17,11 +17,12 @@ public class Incident {
     private Timestamp created_date;
     private String updated_by;
     private Timestamp last_updated_date;
+    private String status;// New field for approval status
 
     public Incident() {
     }
 
-    public Incident(int incident_id, String name, String description, String causes, int location_id, String created_by, Timestamp created_date, String updated_by, Timestamp last_updated_date) {
+    public Incident(int incident_id, String name, String description, String causes, int location_id, String created_by, Timestamp created_date, String updated_by, Timestamp last_updated_date, String status) {
         this.incident_id = incident_id;
         this.name = name;
         this.description = description;
@@ -31,6 +32,6 @@ public class Incident {
         this.created_date = created_date;
         this.updated_by = updated_by;
         this.last_updated_date = last_updated_date;
+        this.status = status; // Initialize the new field
     }
 }
-

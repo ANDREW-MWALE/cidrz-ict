@@ -36,14 +36,16 @@ public class MaintenanceDAO {
             maintenance.setBroughtBy(resultSet.getString("broughtBy"));
             maintenance.setReceivedBy(resultSet.getString("receivedBy"));
             maintenance.setUpdateby(resultSet.getString("updatedBy"));
-            maintenance.setDateBrought(resultSet.getString("dateBrought"));
-            maintenance.setLastUpDated(resultSet.getString("lastUpDate"));
+            maintenance.setDateBrought(Date.valueOf(resultSet.getString("dateBrought")));
+            maintenance.setLastUpDated(Date.valueOf(resultSet.getString("lastUpDate")));
            list.add(maintenance);
         } 
         return list;
     }
 
-    public void editMaintenance(Maintenance maintaince) {
+    public void editMaintenance(Maintenance maintaince) throws SQLException {
+        String sql = "UPDATE maintenance set gudgetName=?, serialnumber=? problemDescription=?,status=?,storageArea=?,broughtBy=?,receivedBy=?, updatedBy=?, dateBrought=?,lastUpDate=? where id=?";
+        PreparedStatement preparedStatement = con.prepareStatement(sql);
 
     }
 
@@ -52,7 +54,7 @@ public class MaintenanceDAO {
     }
 
     public void addGudget(Maintenance maintaince) throws SQLException {
-        String sql = "INSERT INTO maintenance(gudgetName,serialnumber,problemDescription, status,storageArea,broughtBy,receivedBy,updatedBy,dateBrought,lastUpDate)VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO maintenance(gudgetName,serialnumber,problemDescription, status,storageArea,broughtBy,receivedBy,updateBy,dateBrought,lastUpDated)VALUES(?,?,?,?,?,?,?,?,?,?)";
         int i = 0;
         PreparedStatement preparedStatement = con.prepareStatement(sql);
         preparedStatement.setString(1, maintaince.getGudgetName());
@@ -63,8 +65,8 @@ public class MaintenanceDAO {
         preparedStatement.setString(6, maintaince.getBroughtBy());
         preparedStatement.setString(7, maintaince.getReceivedBy());
         preparedStatement.setString(8, maintaince.getUpdateby());
-        preparedStatement.setString(9, maintaince.getDateBrought());
-        preparedStatement.setString(10, maintaince.getLastUpDated());
+        preparedStatement.setString(9, String.valueOf(maintaince.getDateBrought()));
+        preparedStatement.setString(10, String.valueOf(maintaince.getLastUpDated()));
 
         i= preparedStatement.executeUpdate();
     }

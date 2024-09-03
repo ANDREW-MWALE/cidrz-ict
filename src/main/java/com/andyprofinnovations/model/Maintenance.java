@@ -3,6 +3,8 @@ package com.andyprofinnovations.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 
@@ -16,8 +18,8 @@ public class Maintenance {
     private String broughtBy;
     private String receivedBy;
     private String updateby;
-    private String dateBrought;
-    private  String lastUpDated;
+    private Date dateBrought;
+    private  Date lastUpDated;
 
     public Maintenance() {
     }
@@ -32,8 +34,8 @@ public class Maintenance {
         this.broughtBy = broughtBy;
         this.receivedBy = receivedBy;
         this.updateby = updateby;
-        this.dateBrought = dateBrought;
-        this.lastUpDated = lastUpDated;
+        this.dateBrought = Date.valueOf(dateBrought);
+        this.lastUpDated = Date.valueOf(lastUpDated);
     }
 
 }

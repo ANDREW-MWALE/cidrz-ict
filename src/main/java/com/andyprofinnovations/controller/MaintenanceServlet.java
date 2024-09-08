@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
-public class MaintainceServlet extends HttpServlet {
+public class MaintenanceServlet extends HttpServlet {
 
     private MaintenanceDAO maintenanceDAO;
 
@@ -40,7 +41,11 @@ public class MaintainceServlet extends HttpServlet {
                 }
                 break;
             case "edit":
-                showEditForm(request, response);
+                try {
+                    showEditForm(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case "update":
                 try {
@@ -58,7 +63,7 @@ public class MaintainceServlet extends HttpServlet {
                 break;
             default:
                 try {
-                    listMaintaince(request, response);
+                    listMaintenance(request, response);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -88,12 +93,11 @@ public class MaintainceServlet extends HttpServlet {
         }
 
 
-    private void listMaintaince(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-
-        String list  = maintenanceDAO.listMaintance().toString();
-        request.setAttribute("list", list);
-        response.sendRedirect("list-maintenance");
-
+    private void listMaintenance(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
+        List<Maintenance> maintenanceList = maintenanceDAO.listMaintenance(); // or however you fetch the data
+        request.setAttribute("maintenanceList", maintenanceList);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("maintenance-list.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void deleteMaintenance(HttpServletRequest request, HttpServletResponse response) throws SQLException {
@@ -118,9 +122,9 @@ public class MaintainceServlet extends HttpServlet {
 
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         String id = String.valueOf(Integer.parseInt(request.getParameter("id")));
-        Maintenance existingMaintenance = maintenanceDAO.findMaintenance(id);
+        Maintenance existingMaintenance = maintenanceDAO.findMaintenance(Integer.parseInt(id));
         request.setAttribute("maintenance", existingMaintenance);
         RequestDispatcher dispatcher = request.getRequestDispatcher("Maintenance-edit.jsp");
         dispatcher.forward(request, response);
@@ -157,7 +161,7 @@ public class MaintainceServlet extends HttpServlet {
             maintenance.setLastUpDated(Date.valueOf(lastUpDated)); // Note: Use setLastUpdated for the correct field
 
             maintenanceDAO.addGudget(maintenance);
-            response.sendRedirect("list.jsp");
+            response.sendRedirect("maintenance-list.jsp");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             response.getWriter().println("Invalid date format. Expected yyyy-MM-dd.");

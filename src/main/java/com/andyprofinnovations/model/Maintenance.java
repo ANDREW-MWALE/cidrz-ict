@@ -9,7 +9,7 @@ import java.sql.Date;
 @Setter
 
 public class Maintenance {
-    private int identity;
+    private int id;
     private String gudgetName;
     private int serialnumber;
     private String problemDescription;
@@ -24,8 +24,8 @@ public class Maintenance {
     public Maintenance() {
     }
 
-    public Maintenance(int identity, String gudgetName, int serialnumber, String problemDescription, String status, String storageArea, String broughtBy, String receivedBy, String updateby, String dateBrought, String lastUpDated) {
-        this.identity = identity;
+    public Maintenance(int id, String gudgetName, int serialnumber, String problemDescription, String status, String storageArea, String broughtBy, String receivedBy, String updateby, Date dateBrought, Date lastUpDated) {
+        this.id = id;
         this.gudgetName = gudgetName;
         this.serialnumber = serialnumber;
         this.problemDescription = problemDescription;
@@ -34,8 +34,9 @@ public class Maintenance {
         this.broughtBy = broughtBy;
         this.receivedBy = receivedBy;
         this.updateby = updateby;
-        this.dateBrought = Date.valueOf(dateBrought);
-        this.lastUpDated = Date.valueOf(lastUpDated);
+        this.dateBrought = dateBrought;
+        this.lastUpDated = lastUpDated;
     }
+
 
 }

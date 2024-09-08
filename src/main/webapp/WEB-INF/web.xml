@@ -38,8 +38,8 @@
     <servlet-class>com.andyprofinnovations.controller.ApprovalServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>MaintainceServlet</servlet-name>
-    <servlet-class>com.andyprofinnovations.controller.MaintainceServlet</servlet-class>
+    <servlet-name>MaintenanceServlet</servlet-name>
+    <servlet-class>com.andyprofinnovations.controller.MaintenanceServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>IncidentServlet</servlet-name>
@@ -74,8 +74,8 @@
     <url-pattern>/ApprovalServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MaintainceServlet</servlet-name>
-    <url-pattern>/MaintainceServlet</url-pattern>
+    <servlet-name>MaintenanceServlet</servlet-name>
+    <url-pattern>/MaintenanceServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
